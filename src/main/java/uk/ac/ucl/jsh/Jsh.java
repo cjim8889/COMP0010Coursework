@@ -12,7 +12,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,14 +20,21 @@ public class Jsh {
 
     private static String currentDirectory = System.getProperty("user.dir");
 
-    public static void eval(String cmdline, OutputStream output) throws IOException {
+    private Core jshCore;
+
+    public Jsh() {
+        jshCore = new JshCore();
+    }
+
+
+    public void eval(String cmdline, OutputStream output) throws IOException {
         OutputStreamWriter writer = new OutputStreamWriter(output);
         ArrayList<String> rawCommands = new ArrayList<String>();
 		int closingPairIndex, prevDelimiterIndex = 0, splitIndex = 0;
 		for (splitIndex = 0; splitIndex < cmdline.length(); splitIndex++) {
 			char ch = cmdline.charAt(splitIndex);
 			if (ch == ';') {
-				String command = cmdline.substring(prevDelimiterIndex, splitIndex).trim();
+                String command = cmdline.substring(prevDelimiterIndex, splitIndex).trim();
 				rawCommands.add(command);
 				prevDelimiterIndex = splitIndex + 1;
 			} else if (ch == '\'' || ch == '\"') {
@@ -39,13 +45,16 @@ public class Jsh {
 					splitIndex = closingPairIndex;
 				}
 			}
-		}
-		if (!cmdline.isEmpty() && prevDelimiterIndex != splitIndex) {
-			String command = cmdline.substring(prevDelimiterIndex).trim();
-			if (!command.isEmpty()) {
-				rawCommands.add(command);
-			}
-		}
+        }
+        
+        if (!cmdline.isEmpty() && prevDelimiterIndex != splitIndex) {
+            String command = cmdline.substring(prevDelimiterIndex).trim();
+            if (!command.isEmpty()) {
+                rawCommands.add(command);
+            }
+        }
+
+        
         for (String rawCommand : rawCommands) {
             String spaceRegex = "[^\\s\"']+|\"([^\"]*)\"|'([^']*)'";
             ArrayList<String> tokens = new ArrayList<String>();
@@ -53,11 +62,13 @@ public class Jsh {
             Matcher regexMatcher = regex.matcher(rawCommand);
             String nonQuote;
             while (regexMatcher.find()) {
+                // 如果返回的第一组和第二组匹配到的字符串不为null
                 if (regexMatcher.group(1) != null || regexMatcher.group(2) != null) {
                     String quoted = regexMatcher.group(0).trim();
                     tokens.add(quoted.substring(1,quoted.length()-1));
                 } else {
                     nonQuote = regexMatcher.group().trim();
+                    
                     ArrayList<String> globbingResult = new ArrayList<String>();
                     Path dir = Paths.get(currentDirectory);
                     DirectoryStream<Path> stream = Files.newDirectoryStream(dir, nonQuote);
@@ -80,6 +91,8 @@ public class Jsh {
                     throw new RuntimeException("cd: too many arguments");
                 }
                 String dirString = appArgs.get(0);
+
+                Path path = Paths.get(dirString);
                 File dir = new File(currentDirectory, dirString);
                 if (!dir.exists() || !dir.isDirectory()) {
                     throw new RuntimeException("cd: " + dirString + " is not an existing directory");
@@ -87,9 +100,7 @@ public class Jsh {
                 currentDirectory = dir.getCanonicalPath();
                 break;
             case "pwd":
-                writer.write(currentDirectory);
-                writer.write(System.getProperty("line.separator"));
-                writer.flush();
+                jshCore.writeOutputStream(jshCore.getCurrentDirectory(), true);
                 break;
             case "ls":
                 File currDir;
@@ -289,6 +300,7 @@ public class Jsh {
     }
 
     public static void main(String[] args) {
+        Jsh jsh = new Jsh();
         if (args.length > 0) {
             if (args.length != 2) {
                 System.out.println("jsh: wrong number of arguments");
@@ -298,7 +310,7 @@ public class Jsh {
                 System.out.println("jsh: " + args[0] + ": unexpected argument");
             }
             try {
-                eval(args[1], System.out);
+                jsh.eval(args[1], System.out);
             } catch (Exception e) {
                 System.out.println("jsh: " + e.getMessage());
             }
@@ -310,7 +322,7 @@ public class Jsh {
                     System.out.print(prompt);
                     try {
                         String cmdline = input.nextLine();
-                        eval(cmdline, System.out);
+                        jsh.eval(cmdline, System.out);
                     } catch (Exception e) {
                         System.out.println("jsh: " + e.getMessage());
                     }
