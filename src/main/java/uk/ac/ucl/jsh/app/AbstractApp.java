@@ -47,8 +47,12 @@ public abstract class AbstractApp implements App {
         outputStreamWriter.flush();
     }
 
-    void writeOutputStreamLn(String content) throws IOException {
-        writeOutputStream(content + jshCore.getLineSeparator());
+    void writeOutputStreamLn(String content) {
+        try {
+            writeOutputStream(content + jshCore.getLineSeparator());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     void writeErrStream(String err) throws IOException {

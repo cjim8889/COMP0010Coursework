@@ -12,6 +12,7 @@ public interface Core {
     Descriptor getSystemType();
     String getPathSeparator();
     String getLineSeparator();
+    OutputStream getOutputStream();
     void setOutputStream(OutputStream outputStream);
     void writeOutputStream(String content) throws IOException;
     void writeOutputStreamLn(String content) throws IOException;

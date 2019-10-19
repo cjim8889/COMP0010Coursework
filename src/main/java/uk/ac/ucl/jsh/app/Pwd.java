@@ -16,14 +16,8 @@ public class Pwd extends AbstractApp implements App {
     @Override
     public void run() {
         currentPath = this.jshCore.getCurrentDirectory();
-
-        try {
-            writeOutputStreamLn(currentPath.toAbsolutePath().toString());
-            exit(0);
-        } catch (IOException e) {
-            writeErrStreamLn(e.getMessage());
-            exit(1);
-        }
+        writeOutputStreamLn(currentPath.toAbsolutePath().toString());
+        exit(0);
     }
 
     @Override

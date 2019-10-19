@@ -51,6 +51,8 @@ public class JshCore implements Core {
 
     public String getLineSeparator() { return lineSeparator; }
 
+    public OutputStream getOutputStream() { return outputStream; }
+
     public void registerTermination(App app, int status) {
         if (status == 1) {
             try {

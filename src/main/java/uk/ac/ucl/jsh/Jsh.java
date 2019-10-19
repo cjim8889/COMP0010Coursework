@@ -2,6 +2,7 @@ package uk.ac.ucl.jsh;
 
 import uk.ac.ucl.jsh.app.App;
 import uk.ac.ucl.jsh.app.Cd;
+import uk.ac.ucl.jsh.app.Ls;
 import uk.ac.ucl.jsh.app.Pwd;
 
 import java.io.BufferedReader;
@@ -97,35 +98,13 @@ public class Jsh {
                 break;
             case "pwd":
                 App pwd = new Pwd(jshCore);
+                pwd.setOutputStream(jshCore.getOutputStream());
                 pwd.execute();
                 break;
             case "ls":
-                File currDir;
-                if (appArgs.isEmpty()) {
-                    currDir = new File(currentDirectory);
-                } else if (appArgs.size() == 1) {
-                    currDir = new File(appArgs.get(0));
-                } else {
-                    throw new RuntimeException("ls: too many arguments");
-                }
-                try {
-                    File[] listOfFiles = currDir.listFiles();
-                    boolean atLeastOnePrinted = false;
-                    for (File file : listOfFiles) {
-                        if (!file.getName().startsWith(".")) {
-                            writer.write(file.getName());
-                            writer.write("\t");
-                            writer.flush();
-                            atLeastOnePrinted = true;
-                        }
-                    }
-                    if (atLeastOnePrinted) {
-                        writer.write(System.getProperty("line.separator"));
-                        writer.flush();
-                    }
-                } catch (NullPointerException e) {
-                    throw new RuntimeException("ls: no such directory");
-                }
+                App ls = new Ls(jshCore);
+                ls.setArgs(appArgs.toArray(new String[]{}));
+                ls.execute();
                 break;
             case "cat":
                 if (appArgs.isEmpty()) {
