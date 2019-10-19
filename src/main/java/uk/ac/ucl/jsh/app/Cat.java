@@ -23,7 +23,7 @@ public class Cat extends AbstractApp implements App{
                 File curFile = new File(jshCore.getCurrentDirectory()+jshCore.getPathSeparator()+arg);
                 try {
                     FileInputStream fileInputStream = new FileInputStream(curFile);
-                    fileInputStream.transferTo(jshCore.getRawOutputStream());
+                    fileInputStream.transferTo(getRawOutputStream());
                 } catch (FileNotFoundException e) {
                     throw new RuntimeException("File not found");
                 } catch (IOException e) {

@@ -21,5 +21,4 @@ public interface Core {
     void writeErrStreamLn(String err) throws IOException;
     void setCurrentDirectory(Path path);
     void registerTermination(App app, int status);
-    OutputStream getRawOutputStream();
 }
