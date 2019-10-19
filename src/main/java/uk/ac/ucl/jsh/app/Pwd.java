@@ -7,23 +7,15 @@ import java.nio.file.Path;
 
 public class Pwd extends AbstractApp implements App {
 
-    private Path currentPath;
-
     public Pwd(Core jshCore) {
         super(jshCore);
     }
 
     @Override
     public void run() {
-        currentPath = this.jshCore.getCurrentDirectory();
-        writeOutputStreamLn(currentPath.toAbsolutePath().toString());
-        exit(0);
+        writeOutputStreamLn(this.jshCore.getCurrentDirectory().toString());
     }
 
     @Override
-    public void setArgs(String[] args) {
-        return;
-    }
-
-
+    public void setArgs(String[] args) { }
 }

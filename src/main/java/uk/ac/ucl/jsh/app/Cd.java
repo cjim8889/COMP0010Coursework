@@ -42,13 +42,8 @@ public class Cd extends AbstractApp implements App {
         } else {
             runOnUnix();
         }
-        try {
-            changeDirectory();
-            exit(0);
-        } catch (RuntimeException e) {
-            writeErrStreamLn(e.getMessage());
-            exit(1);
-        }
+
+        changeDirectory();
     }
 
     private void runOnWindows() {
@@ -90,9 +85,7 @@ public class Cd extends AbstractApp implements App {
 
     public void setArgs(String[] args) throws IllegalArgumentException {
         if(args.length != 1) {
-            writeErrStreamLn(new IllegalArgumentException("Arguments do not match with the program").getMessage());
-            exit(1);
-            return;
+            throw new RuntimeException("Arguments do not match with the program");
         }
 
         argument = args[0];

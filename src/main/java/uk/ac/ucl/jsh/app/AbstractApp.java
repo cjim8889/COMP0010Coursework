@@ -11,9 +11,8 @@ public abstract class AbstractApp implements App {
 
     Core jshCore;
     private InputStream inputStream;
-    private OutputStream outputStream, errOutputStream;
-    private OutputStreamWriter outputStreamWriter, errOutputStreamWriter;
-    int exitStatus = -1;
+    private OutputStream outputStream;
+    private OutputStreamWriter outputStreamWriter;
 
     AbstractApp(Core jshCore) {
         this.jshCore = jshCore;
@@ -23,20 +22,9 @@ public abstract class AbstractApp implements App {
         //Err output stream is default to be Sys.err
         inputStream = System.in;
         outputStream = System.out;
-        errOutputStream = System.err;
 
         outputStreamWriter = new OutputStreamWriter(outputStream);
-        errOutputStreamWriter = new OutputStreamWriter(errOutputStream);
     }
-
-    public void execute() {
-        if (exitStatus != -1) {
-            return;
-        }
-
-        run();
-    }
-
 
     void writeOutputStream(String content) throws IOException {
         if (content.isEmpty()) {
@@ -55,27 +43,6 @@ public abstract class AbstractApp implements App {
         }
     }
 
-    void writeErrStream(String err) throws IOException {
-        if (err.isEmpty()) {
-            return;
-        }
-
-        errOutputStreamWriter.write(err);
-        errOutputStreamWriter.flush();
-    }
-
-    void writeErrStreamLn(String err) {
-        if (err.isEmpty()) {
-            return;
-        }
-
-        try {
-            writeErrStream(this.getClass().getSimpleName() + ": " + err + jshCore.getLineSeparator());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void setInputStream(InputStream inputStream) {
         this.inputStream = inputStream;
     }
@@ -85,17 +52,6 @@ public abstract class AbstractApp implements App {
         outputStreamWriter = new OutputStreamWriter(outputStream);
     }
 
-    public void setErrOutputStream(OutputStream errOutputStream) {
-        this.errOutputStream = errOutputStream;
-        errOutputStreamWriter = new OutputStreamWriter(errOutputStream);
-    }
-
-    void exit(int status) {
-        exitStatus = status;
-        jshCore.registerTermination(this, exitStatus);
-    }
-
-
     public abstract void run() throws RuntimeException;
-    public abstract void setArgs(String[] args) throws IllegalArgumentException;
+    public abstract void setArgs(String[] args) throws RuntimeException;
 }
