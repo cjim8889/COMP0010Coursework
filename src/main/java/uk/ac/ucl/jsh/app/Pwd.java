@@ -2,8 +2,6 @@ package uk.ac.ucl.jsh.app;
 
 import uk.ac.ucl.jsh.Core;
 
-import java.io.IOException;
-import java.nio.file.Path;
 
 public class Pwd extends AbstractApp implements App {
 
