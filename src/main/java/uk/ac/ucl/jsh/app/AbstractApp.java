@@ -81,6 +81,11 @@ public abstract class AbstractApp implements App {
         outputStreamWriter = new OutputStreamWriter(outputStream);
     }
 
+    public void setErrOutputStream(OutputStream errOutputStream) {
+        this.errOutputStream = errOutputStream;
+        errOutputStreamWriter = new OutputStreamWriter(errOutputStream);
+    }
+
     void exit(int status) {
         exitStatus = status;
         jshCore.registerTermination(this, exitStatus);
