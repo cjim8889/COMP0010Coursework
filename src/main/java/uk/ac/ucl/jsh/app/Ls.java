@@ -38,6 +38,8 @@ public class Ls extends AbstractApp implements App{
         for (File file: files){
             writeOutputStreamLn(file.getName());
         }
+
+        exit(0);
     }
 
 
