@@ -10,7 +10,7 @@ public abstract class AbstractApp implements App {
         this.jshCore = jshCore;
     }
 
-    public abstract void run();
+    public abstract void run() throws RuntimeException;
     public abstract String output();
     public abstract void setArgs(String[] args) throws IllegalArgumentException;
 }

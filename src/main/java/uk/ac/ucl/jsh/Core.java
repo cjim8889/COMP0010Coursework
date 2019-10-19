@@ -12,5 +12,6 @@ public interface Core {
     void setOutputStream(OutputStream outputStream);
     void writeOutputStream(String content) throws IOException;
     void writeOutputStreamLn(String content) throws IOException;
+    void writeErrStreamLn(String err) throws IOException;
     void setCurrentDirectory(Path path);
 }

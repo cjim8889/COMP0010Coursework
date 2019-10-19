@@ -95,8 +95,8 @@ public class Jsh {
                     cd.setArgs(appArgs.toArray(new String[]{}));
                     cd.run();
                 }
-                catch (IllegalArgumentException e) {
-                    System.out.println(e.getMessage());
+                catch (RuntimeException e) {
+                    jshCore.writeErrStreamLn(e.getMessage());
                 }
 
                 break;

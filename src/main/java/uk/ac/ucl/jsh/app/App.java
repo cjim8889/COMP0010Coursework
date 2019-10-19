@@ -2,7 +2,7 @@ package uk.ac.ucl.jsh.app;
 
 
 public interface App {
-    void setArgs(String[] args) throws IllegalArgumentException;
-    void run();
+    void setArgs(String[] args) throws RuntimeException;
+    void run() throws RuntimeException;
     String output();
 }

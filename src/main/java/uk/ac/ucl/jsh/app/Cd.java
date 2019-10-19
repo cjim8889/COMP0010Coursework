@@ -26,8 +26,7 @@ public class Cd extends AbstractApp implements App {
 
     }
 
-    @Override
-    public void run() {
+    public void run() throws RuntimeException {
         initialise();
 
         if (argument.equals("~")) {
@@ -40,23 +39,17 @@ public class Cd extends AbstractApp implements App {
             return;
         }
 
-        try {
-            if (systemType == Descriptor.Windows) {
-                runOnWindows();
-            } else {
-                runOnUnix();
-            }
-        } catch (FileNotFoundException e) {
-            try {
-                jshCore.writeOutputStreamLn(e.getMessage());
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+
+        if (systemType == Descriptor.Windows) {
+            runOnWindows();
+        } else {
+            runOnUnix();
         }
+
+        changeDirectory();
     }
 
-    private void runOnWindows() throws FileNotFoundException {
-
+    private void runOnWindows() {
         String windowsStartRegex = "([A-Za-z]:\\\\)";
         Pattern regex = Pattern.compile(windowsStartRegex);
         Matcher regexMatcher = regex.matcher(argument);
@@ -66,8 +59,6 @@ public class Cd extends AbstractApp implements App {
         } else {
             destinationPath = Paths.get(jshCore.getCurrentDirectory().toAbsolutePath().toString() + jshCore.getPathSeparator() + argument);
         }
-
-        changeDirectory();
     }
 
     private void runOnUnix() {
@@ -81,24 +72,22 @@ public class Cd extends AbstractApp implements App {
     }
 
 
-    private void changeDirectory() throws FileNotFoundException {
+    private void changeDirectory() throws RuntimeException {
         if (Files.exists(destinationPath)) {
             if (Files.isDirectory(destinationPath)) {
                 jshCore.setCurrentDirectory(destinationPath);
             } else {
-                throw new FileNotFoundException("Is not a path");
+                throw new RuntimeException("Is not a path");
             }
         } else {
-            throw new FileNotFoundException("No such path exists");
+            throw new RuntimeException("No such path exists");
         }
     }
 
-    @Override
     public String output() {
         return null;
     }
 
-    @Override
     public void setArgs(String[] args) throws IllegalArgumentException {
         if(args.length > 1) {
             throw new IllegalArgumentException("Arguments do not match with the program");

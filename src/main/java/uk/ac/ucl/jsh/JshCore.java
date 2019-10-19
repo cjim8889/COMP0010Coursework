@@ -11,8 +11,9 @@ public class JshCore implements Core {
     private Path currentDirectory, homeDirectory;
     private String lineSeparator, pathSeparator;
     private Descriptor systemType;
-    private OutputStream outputStream;
+    private OutputStream outputStream, errStream;
     private OutputStreamWriter outputStreamWriter;
+    private OutputStreamWriter errStreamWriter;
 
     public JshCore() {
         currentDirectory = Paths.get(System.getProperty("user.dir"));
@@ -21,11 +22,13 @@ public class JshCore implements Core {
         pathSeparator = System.getProperty("file.separator");
 
         outputStream = System.out;
+        errStream = System.err;
 
 
         //Initialisation
         systemType = pathSeparator.equals("\\") ? Descriptor.Windows : Descriptor.Unix;
         outputStreamWriter = new OutputStreamWriter(outputStream);
+        errStreamWriter = new OutputStreamWriter(errStream);
     }
 
     public Path getCurrentDirectory() {
@@ -47,7 +50,7 @@ public class JshCore implements Core {
     public void setOutputStream(OutputStream outputStream) {
         this.outputStream = outputStream;
 
-        resetOutputStreamWriter();
+        outputStreamWriter = new OutputStreamWriter(outputStream);
     }
 
     public void writeOutputStream(String content) throws IOException {
@@ -63,11 +66,25 @@ public class JshCore implements Core {
         writeOutputStream(content + lineSeparator);
     }
 
+    private void writeErrStream(String err) throws IOException {
+        if (err.isEmpty()) {
+            return;
+        }
+
+        errStreamWriter.write(err);
+        errStreamWriter.flush();
+    }
+
+    public void writeErrStreamLn(String err) throws IOException {
+        if (err.isEmpty()) {
+            return;
+        }
+
+        writeErrStream("[Error]Jsh: " + err + lineSeparator);
+    }
+
     public void setCurrentDirectory(Path path) {
         currentDirectory = path;
     }
 
-    private void resetOutputStreamWriter() {
-        outputStreamWriter = new OutputStreamWriter(outputStream);
-    }
 }
