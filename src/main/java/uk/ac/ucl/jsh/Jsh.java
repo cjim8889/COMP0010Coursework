@@ -97,7 +97,6 @@ public class Jsh {
                 break;
             case "pwd":
                 App pwd = new Pwd(jshCore);
-
                 pwd.execute();
                 break;
             case "ls":

@@ -89,9 +89,10 @@ public class Cd extends AbstractApp implements App {
 
 
     public void setArgs(String[] args) throws IllegalArgumentException {
-        if(args.length > 1) {
+        if(args.length != 1) {
             writeErrStreamLn(new IllegalArgumentException("Arguments do not match with the program").getMessage());
             exit(1);
+            return;
         }
 
         argument = args[0];
