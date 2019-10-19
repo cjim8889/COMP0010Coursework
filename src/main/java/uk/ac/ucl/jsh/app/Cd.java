@@ -3,9 +3,6 @@ package uk.ac.ucl.jsh.app;
 import uk.ac.ucl.jsh.Core;
 import uk.ac.ucl.jsh.Descriptor;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -26,7 +23,7 @@ public class Cd extends AbstractApp implements App {
         systemType = jshCore.getSystemType();
     }
 
-    public void run() throws RuntimeException {
+    public void run() {
         initialise();
 
         if (argument.equals("~")) {
@@ -45,8 +42,13 @@ public class Cd extends AbstractApp implements App {
         } else {
             runOnUnix();
         }
-
-        changeDirectory();
+        try {
+            changeDirectory();
+            exit(0);
+        } catch (RuntimeException e) {
+            writeErrStreamLn(e.getMessage());
+            exit(1);
+        }
     }
 
     private void runOnWindows() {
@@ -85,13 +87,11 @@ public class Cd extends AbstractApp implements App {
         }
     }
 
-    public String output() {
-        return null;
-    }
 
     public void setArgs(String[] args) throws IllegalArgumentException {
         if(args.length > 1) {
-            throw new IllegalArgumentException("Arguments do not match with the program");
+            writeErrStreamLn(new IllegalArgumentException("Arguments do not match with the program").getMessage());
+            exit(1);
         }
 
         argument = args[0];

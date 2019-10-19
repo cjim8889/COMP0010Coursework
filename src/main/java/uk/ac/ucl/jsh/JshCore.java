@@ -1,5 +1,7 @@
 package uk.ac.ucl.jsh;
 
+import uk.ac.ucl.jsh.app.App;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -45,6 +47,18 @@ public class JshCore implements Core {
 
     public String getPathSeparator() {
         return pathSeparator;
+    }
+
+    public String getLineSeparator() { return lineSeparator; }
+
+    public void registerTermination(App app, int status) {
+        if (status == 1) {
+            try {
+                writeOutputStreamLn(app.getClass().getSimpleName().toString() + " has terminated with status " + status);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void setOutputStream(OutputStream outputStream) {

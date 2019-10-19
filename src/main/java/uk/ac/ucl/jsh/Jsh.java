@@ -30,6 +30,8 @@ public class Jsh {
         jshCore = new JshCore();
     }
 
+    public Core getJshCore() { return jshCore; }
+
 
     public void eval(String cmdline, OutputStream output) throws IOException {
         OutputStreamWriter writer = new OutputStreamWriter(output);
@@ -90,22 +92,13 @@ public class Jsh {
             switch (appName) {
             case "cd":
                 App cd = new Cd(jshCore);
-
-                try {
-                    cd.setArgs(appArgs.toArray(new String[]{}));
-                    cd.run();
-                }
-                catch (RuntimeException e) {
-                    jshCore.writeErrStreamLn(e.getMessage());
-                }
-
+                cd.setArgs(appArgs.toArray(new String[]{}));
+                cd.execute();
                 break;
             case "pwd":
                 App pwd = new Pwd(jshCore);
 
-                pwd.run();
-
-                jshCore.writeOutputStreamLn(pwd.output());
+                pwd.execute();
                 break;
             case "ls":
                 File currDir;
