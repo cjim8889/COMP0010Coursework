@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 public class JshCore implements Core {
 
     private Path currentDirectory, homeDirectory;
-    private String lineSeparator;
+    private String lineSeparator, pathSeparator;
     private Descriptor systemType;
     private OutputStream outputStream;
     private OutputStreamWriter outputStreamWriter;
@@ -18,11 +18,13 @@ public class JshCore implements Core {
         currentDirectory = Paths.get(System.getProperty("user.dir"));
         homeDirectory = Paths.get(System.getProperty("user.home"));
         lineSeparator = System.getProperty("line.separator");
+        pathSeparator = System.getProperty("file.separator");
+
         outputStream = System.out;
 
 
         //Initialisation
-        systemType = System.getProperty("file.separator").equals("\\") ? Descriptor.Windows : Descriptor.Unix;
+        systemType = pathSeparator.equals("\\") ? Descriptor.Windows : Descriptor.Unix;
         outputStreamWriter = new OutputStreamWriter(outputStream);
     }
 
@@ -36,6 +38,10 @@ public class JshCore implements Core {
 
     public Descriptor getSystemType() {
         return systemType;
+    }
+
+    public String getPathSeparator() {
+        return pathSeparator;
     }
 
     public void setOutputStream(OutputStream outputStream) {
@@ -55,6 +61,10 @@ public class JshCore implements Core {
 
     public void writeOutputStreamLn(String content) throws IOException {
         writeOutputStream(content + lineSeparator);
+    }
+
+    public void setCurrentDirectory(Path path) {
+        currentDirectory = path;
     }
 
     private void resetOutputStreamWriter() {

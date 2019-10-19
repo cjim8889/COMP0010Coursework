@@ -1,6 +1,7 @@
 package uk.ac.ucl.jsh;
 
 import uk.ac.ucl.jsh.app.App;
+import uk.ac.ucl.jsh.app.Cd;
 import uk.ac.ucl.jsh.app.Pwd;
 
 import java.io.BufferedReader;
@@ -88,19 +89,16 @@ public class Jsh {
             ArrayList<String> appArgs = new ArrayList<String>(tokens.subList(1, tokens.size()));
             switch (appName) {
             case "cd":
-                if (appArgs.isEmpty()) {
-                    throw new RuntimeException("cd: missing argument");
-                } else if (appArgs.size() > 1) {
-                    throw new RuntimeException("cd: too many arguments");
-                }
-                String dirString = appArgs.get(0);
+                App cd = new Cd(jshCore);
 
-                Path path = Paths.get(dirString);
-                File dir = new File(currentDirectory, dirString);
-                if (!dir.exists() || !dir.isDirectory()) {
-                    throw new RuntimeException("cd: " + dirString + " is not an existing directory");
+                try {
+                    cd.setArgs(appArgs.toArray(new String[]{}));
+                    cd.run();
                 }
-                currentDirectory = dir.getCanonicalPath();
+                catch (IllegalArgumentException e) {
+                    System.out.println(e.getMessage());
+                }
+
                 break;
             case "pwd":
                 App pwd = new Pwd(jshCore);
@@ -325,7 +323,7 @@ public class Jsh {
             Scanner input = new Scanner(System.in);
             try {
                 while (true) {
-                    String prompt = currentDirectory + "> ";
+                    String prompt = jsh.jshCore.getCurrentDirectory().toAbsolutePath().toString() + "> ";
                     System.out.print(prompt);
                     try {
                         String cmdline = input.nextLine();

@@ -12,5 +12,5 @@ public abstract class AbstractApp implements App {
 
     public abstract void run();
     public abstract String output();
-    public abstract void setArgs(String[] args);
+    public abstract void setArgs(String[] args) throws IllegalArgumentException;
 }

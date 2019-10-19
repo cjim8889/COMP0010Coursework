@@ -4,7 +4,7 @@ import uk.ac.ucl.jsh.Core;
 
 import java.nio.file.Path;
 
-public class Pwd extends AbstractApp {
+public class Pwd extends AbstractApp implements App {
 
     private Path currentPath;
 

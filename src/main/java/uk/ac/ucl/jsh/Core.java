@@ -8,7 +8,9 @@ public interface Core {
     Path getCurrentDirectory();
     Path getHomeDirectory();
     Descriptor getSystemType();
+    String getPathSeparator();
     void setOutputStream(OutputStream outputStream);
     void writeOutputStream(String content) throws IOException;
     void writeOutputStreamLn(String content) throws IOException;
+    void setCurrentDirectory(Path path);
 }
