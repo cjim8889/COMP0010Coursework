@@ -104,42 +104,11 @@ public class Jsh {
                     ls.run();
                     break;
                 case "cat":
-                    if (appArgs.isEmpty()) {
-                        throw new RuntimeException("cat: missing arguments");
-                    } else {
-                        for (String arg : appArgs) {
-                            Charset encoding = StandardCharsets.UTF_8;
-                            File currFile = new File(currentDirectory + File.separator + arg);
-                            if (currFile.exists()) {
-                                Path filePath = Paths.get(currentDirectory + File.separator + arg);
-                                try (BufferedReader reader = Files.newBufferedReader(filePath, encoding)) {
-                                    String line = null;
-                                    while ((line = reader.readLine()) != null) {
-                                        writer.write(String.valueOf(line));
-                                        writer.write(System.getProperty("line.separator"));
-                                        writer.flush();
-                                    }
-                                } catch (IOException e) {
-                                    throw new RuntimeException("cat: cannot open " + arg);
-                                }
-                            } else {
-                                throw new RuntimeException("cat: file does not exist");
-                            }
-                        }
-                    }
+                    Cat cat = new Cat(jshCore);
+                    cat.setArgs(appArgs.toArray(new String[]{}));
+                    cat.run();
                     break;
                 case "echo":
-//                    boolean atLeastOnePrinted = false;
-//                    for (String arg : appArgs) {
-//                        writer.write(arg);
-//                        writer.write(" ");
-//                        writer.flush();
-//                        atLeastOnePrinted = true;
-//                    }
-//                    if (atLeastOnePrinted) {
-//                        writer.write(System.getProperty("line.separator"));
-//                        writer.flush();
-//                    }
                     Echo echo = new Echo(jshCore);
                     echo.setArgs(appArgs.toArray(new String[]{}));
                     echo.run();
