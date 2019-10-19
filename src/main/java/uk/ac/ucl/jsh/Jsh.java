@@ -1,9 +1,6 @@
 package uk.ac.ucl.jsh;
 
-import uk.ac.ucl.jsh.app.App;
-import uk.ac.ucl.jsh.app.Cd;
-import uk.ac.ucl.jsh.app.Ls;
-import uk.ac.ucl.jsh.app.Pwd;
+import uk.ac.ucl.jsh.app.*;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -132,17 +129,20 @@ public class Jsh {
                     }
                     break;
                 case "echo":
-                    boolean atLeastOnePrinted = false;
-                    for (String arg : appArgs) {
-                        writer.write(arg);
-                        writer.write(" ");
-                        writer.flush();
-                        atLeastOnePrinted = true;
-                    }
-                    if (atLeastOnePrinted) {
-                        writer.write(System.getProperty("line.separator"));
-                        writer.flush();
-                    }
+//                    boolean atLeastOnePrinted = false;
+//                    for (String arg : appArgs) {
+//                        writer.write(arg);
+//                        writer.write(" ");
+//                        writer.flush();
+//                        atLeastOnePrinted = true;
+//                    }
+//                    if (atLeastOnePrinted) {
+//                        writer.write(System.getProperty("line.separator"));
+//                        writer.flush();
+//                    }
+                    Echo echo = new Echo(jshCore);
+                    echo.setArgs(appArgs.toArray(new String[]{}));
+                    echo.run();
                     break;
                 case "head":
                     if (appArgs.isEmpty()) {
