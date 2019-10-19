@@ -3,18 +3,20 @@ package uk.ac.ucl.jsh;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class JshCore implements Core {
 
-    private String currentDirectory, homeDirectory;
+    private Path currentDirectory, homeDirectory;
     private String lineSeparator;
     private Descriptor systemType;
     private OutputStream outputStream;
     private OutputStreamWriter outputStreamWriter;
 
     public JshCore() {
-        currentDirectory = System.getProperty("user.dir");
-        homeDirectory = System.getProperty("user.home");
+        currentDirectory = Paths.get(System.getProperty("user.dir"));
+        homeDirectory = Paths.get(System.getProperty("user.home"));
         lineSeparator = System.getProperty("line.separator");
         outputStream = System.out;
 
@@ -24,11 +26,11 @@ public class JshCore implements Core {
         outputStreamWriter = new OutputStreamWriter(outputStream);
     }
 
-    public String getCurrentDirectory() {
+    public Path getCurrentDirectory() {
         return currentDirectory;
     }
 
-    public String getHomeDirectory() {
+    public Path getHomeDirectory() {
         return homeDirectory;
     }
 
@@ -51,8 +53,8 @@ public class JshCore implements Core {
         outputStreamWriter.flush();
     }
 
-    public void writeOutputStream(String content, boolean newLine) throws IOException {
-        writeOutputStream(content + (newLine ? lineSeparator : ""));
+    public void writeOutputStreamLn(String content) throws IOException {
+        writeOutputStream(content + lineSeparator);
     }
 
     private void resetOutputStreamWriter() {

@@ -1,5 +1,8 @@
 package uk.ac.ucl.jsh;
 
+import uk.ac.ucl.jsh.app.App;
+import uk.ac.ucl.jsh.app.Pwd;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -100,7 +103,11 @@ public class Jsh {
                 currentDirectory = dir.getCanonicalPath();
                 break;
             case "pwd":
-                jshCore.writeOutputStream(jshCore.getCurrentDirectory(), true);
+                App pwd = new Pwd(jshCore);
+
+                pwd.run();
+
+                jshCore.writeOutputStreamLn(pwd.output());
                 break;
             case "ls":
                 File currDir;
