@@ -5,6 +5,8 @@ import uk.ac.ucl.jsh.app.App;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -12,6 +14,7 @@ public class JshCore implements Core {
 
     private Path currentDirectory, homeDirectory;
     private String lineSeparator, pathSeparator;
+    private Charset encoding;
     private Descriptor systemType;
     private OutputStream outputStream, errStream;
     private OutputStreamWriter outputStreamWriter;
@@ -26,11 +29,16 @@ public class JshCore implements Core {
         outputStream = System.out;
         errStream = System.err;
 
+        encoding = StandardCharsets.UTF_8;
 
         //Initialisation
         systemType = pathSeparator.equals("\\") ? Descriptor.Windows : Descriptor.Unix;
         outputStreamWriter = new OutputStreamWriter(outputStream);
         errStreamWriter = new OutputStreamWriter(errStream);
+    }
+
+    public Charset getEncoding() {
+        return encoding;
     }
 
     public Path getCurrentDirectory() {

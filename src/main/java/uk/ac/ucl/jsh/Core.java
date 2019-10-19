@@ -4,6 +4,7 @@ import uk.ac.ucl.jsh.app.App;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 
 public interface Core {
@@ -13,6 +14,7 @@ public interface Core {
     String getPathSeparator();
     String getLineSeparator();
     OutputStream getOutputStream();
+    Charset getEncoding();
     void setOutputStream(OutputStream outputStream);
     void writeOutputStream(String content) throws IOException;
     void writeOutputStreamLn(String content) throws IOException;
