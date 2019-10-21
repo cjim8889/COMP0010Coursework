@@ -22,6 +22,7 @@ public class IntelligentPath {
             case "..":
                 return currentDirectory.getParent();
         }
+
         Path uPath;
         if (systemType == Descriptor.Windows) {
             uPath =  getPathOnWindows(str, currentDirectory);
