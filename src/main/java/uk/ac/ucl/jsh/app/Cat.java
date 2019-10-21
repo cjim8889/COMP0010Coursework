@@ -1,6 +1,7 @@
 package uk.ac.ucl.jsh.app;
 
 import uk.ac.ucl.jsh.Core;
+import uk.ac.ucl.jsh.utility.IntelligentPath;
 
 import java.io.*;
 
@@ -14,7 +15,7 @@ public class Cat extends AbstractApp implements App{
     @Override
     public void run() throws RuntimeException {
         for (String arg : arguments){
-            File curFile = new File(jshCore.getCurrentDirectory()+jshCore.getPathSeparator()+arg);
+            File curFile = new File(IntelligentPath.getPath(arg, jshCore.getCurrentDirectory()).toAbsolutePath().toString());
             try {
                 FileInputStream fileInputStream = new FileInputStream(curFile);
                 fileInputStream.transferTo(getRawOutputStream());

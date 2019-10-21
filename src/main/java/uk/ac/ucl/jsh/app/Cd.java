@@ -2,12 +2,10 @@ package uk.ac.ucl.jsh.app;
 
 import uk.ac.ucl.jsh.Core;
 import uk.ac.ucl.jsh.Descriptor;
+import uk.ac.ucl.jsh.utility.IntelligentPath;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Cd extends AbstractApp implements App {
 
@@ -26,59 +24,12 @@ public class Cd extends AbstractApp implements App {
     public void run() {
         initialise();
 
-        if (argument.equals("~")) {
-            jshCore.setCurrentDirectory(jshCore.getHomeDirectory());
-            return;
-        } else if(argument.equals(".")) {
-            return;
-        } else if(argument.equals("..")) {
-            jshCore.setCurrentDirectory(jshCore.getCurrentDirectory().getParent());
-            return;
-        }
-
-
-        if (systemType == Descriptor.Windows) {
-            runOnWindows();
+        Path path = IntelligentPath.getPath(argument, jshCore.getCurrentDirectory());
+        if (Files.isDirectory(path)) {
+            destinationPath = path;
+            jshCore.setCurrentDirectory(destinationPath);
         } else {
-            runOnUnix();
-        }
-
-        changeDirectory();
-    }
-
-    private void runOnWindows() {
-        String windowsStartRegex = "([A-Za-z]:\\\\)";
-        Pattern regex = Pattern.compile(windowsStartRegex);
-        Matcher regexMatcher = regex.matcher(argument);
-        if (regexMatcher.find()) {
-            destinationPath = Paths.get(argument);
-        } else {
-            destinationPath = Paths.get(jshCore.getCurrentDirectory().toAbsolutePath().toString() + jshCore.getPathSeparator() + argument);
-        }
-    }
-
-    private void runOnUnix() {
-        if (argument.startsWith("/")) {
-            destinationPath = Paths.get(argument);
-        } else if (argument.startsWith("./")) {
-            destinationPath = Paths.get(jshCore.getCurrentDirectory().toAbsolutePath().toString() + jshCore.getPathSeparator() + argument.substring(1));
-        } else if (argument.startsWith("../")) {
-            destinationPath = Paths.get(jshCore.getCurrentDirectory().getParent().toAbsolutePath().toString() + jshCore.getPathSeparator() + argument.substring(2));
-        } else {
-            destinationPath = Paths.get(jshCore.getCurrentDirectory().toAbsolutePath().toString() + jshCore.getPathSeparator() + argument);
-        }
-    }
-
-
-    private void changeDirectory() throws RuntimeException {
-        if (Files.exists(destinationPath)) {
-            if (Files.isDirectory(destinationPath)) {
-                jshCore.setCurrentDirectory(destinationPath);
-            } else {
-                throw new RuntimeException("Is not a path");
-            }
-        } else {
-            throw new RuntimeException("No such path exists");
+            throw new RuntimeException("Path is not a directory");
         }
     }
 
