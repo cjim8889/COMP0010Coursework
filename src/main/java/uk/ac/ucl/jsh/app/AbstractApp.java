@@ -26,21 +26,21 @@ public abstract class AbstractApp implements App {
         outputStreamWriter = new OutputStreamWriter(outputStream);
     }
 
-    void writeOutputStream(String content) throws IOException {
+    void writeOutputStream(String content) throws RuntimeException {
         if (content.isEmpty()) {
             return;
         }
 
-        outputStreamWriter.write(content);
-        outputStreamWriter.flush();
+        try {
+            outputStreamWriter.write(content);
+            outputStreamWriter.flush();
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     void writeOutputStreamLn(String content) {
-        try {
-            writeOutputStream(content + jshCore.getLineSeparator());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        writeOutputStream(content + jshCore.getLineSeparator());
     }
 
     OutputStream getRawOutputStream() {

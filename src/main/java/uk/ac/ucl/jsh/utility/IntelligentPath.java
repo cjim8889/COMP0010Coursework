@@ -38,7 +38,7 @@ public class IntelligentPath {
     }
 
     private static Path getPathOnWindows(String str, Path currentDirectory) {
-        String windowsStartRegex = "(<script>[.]*</script>)";
+        String windowsStartRegex = "([A-Za-z]:\\\\)";
         Pattern regex = Pattern.compile(windowsStartRegex);
         Matcher regexMatcher = regex.matcher(str);
         if (regexMatcher.find()) {

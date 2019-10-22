@@ -34,7 +34,7 @@ public class Ls extends AbstractApp implements App{
     }
 
 
-    public void setArgs(String[] args) throws IllegalArgumentException {
+    public void setArgs(String[] args) throws RuntimeException {
         if(args.length > 1) {
             throw new RuntimeException("Arguments do not match with the program");
         }
