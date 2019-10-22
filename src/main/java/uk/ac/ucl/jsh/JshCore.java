@@ -3,10 +3,9 @@ package uk.ac.ucl.jsh;
 import uk.ac.ucl.jsh.app.App;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -14,11 +13,10 @@ public class JshCore implements Core {
 
     private Path currentDirectory, homeDirectory;
     private String lineSeparator, pathSeparator;
-    private Charset encoding;
     private Descriptor systemType;
-    private OutputStream outputStream, errStream;
+    private OutputStream outputStream;
+    private InputStream inputStream;
     private OutputStreamWriter outputStreamWriter;
-    private OutputStreamWriter errStreamWriter;
 
     public JshCore() {
         currentDirectory = Paths.get(System.getProperty("user.dir"));
@@ -27,19 +25,14 @@ public class JshCore implements Core {
         pathSeparator = System.getProperty("file.separator");
 
         outputStream = System.out;
-        errStream = System.err;
+        inputStream = System.in;
 
-        encoding = StandardCharsets.UTF_8;
 
         //Initialisation
         systemType = pathSeparator.equals("\\") ? Descriptor.Windows : Descriptor.Unix;
         outputStreamWriter = new OutputStreamWriter(outputStream);
-        errStreamWriter = new OutputStreamWriter(errStream);
     }
 
-    public Charset getEncoding() {
-        return encoding;
-    }
 
     public Path getCurrentDirectory() {
         return currentDirectory;
@@ -60,6 +53,8 @@ public class JshCore implements Core {
     public String getLineSeparator() { return lineSeparator; }
 
     public OutputStream getOutputStream() { return outputStream; }
+
+    public InputStream getInputStream() { return inputStream; }
 
     public void registerTermination(App app, int status) {
         if (status == 1) {
@@ -88,23 +83,6 @@ public class JshCore implements Core {
 
     public void writeOutputStreamLn(String content) throws IOException {
         writeOutputStream(content + lineSeparator);
-    }
-
-    private void writeErrStream(String err) throws IOException {
-        if (err.isEmpty()) {
-            return;
-        }
-
-        errStreamWriter.write(err);
-        errStreamWriter.flush();
-    }
-
-    public void writeErrStreamLn(String err) throws IOException {
-        if (err.isEmpty()) {
-            return;
-        }
-
-        writeErrStream("[Error]Jsh: " + err + lineSeparator);
     }
 
     public void setCurrentDirectory(Path path) {

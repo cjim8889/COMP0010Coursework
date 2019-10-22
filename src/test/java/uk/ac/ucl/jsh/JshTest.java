@@ -19,9 +19,9 @@ public class JshTest {
         out = new PipedOutputStream(in);
         Jsh jsh = new Jsh();
         jsh.getJshCore().setOutputStream(out);
-        jsh.eval("echo foasfdo", out);
+        jsh.eval("echo meimaobing", out);
         Scanner scn = new Scanner(in);
-        assertEquals("foasfdo", scn.next());
+        assertEquals("meimaobing", scn.next());
     }
 
     @Test

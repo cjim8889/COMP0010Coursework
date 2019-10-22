@@ -2,7 +2,6 @@ package uk.ac.ucl.jsh.app;
 
 import uk.ac.ucl.jsh.Core;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -20,8 +19,8 @@ public abstract class AbstractApp implements App {
         //Input stream is default to be Sys.in
         //Output stream is default to be Sys.out unless otherwise defined
         //Err output stream is default to be Sys.err
-        inputStream = System.in;
-        outputStream = System.out;
+        inputStream = jshCore.getInputStream();
+        outputStream = jshCore.getOutputStream();
 
         outputStreamWriter = new OutputStreamWriter(outputStream);
     }

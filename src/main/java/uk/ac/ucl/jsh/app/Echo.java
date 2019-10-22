@@ -2,6 +2,7 @@ package uk.ac.ucl.jsh.app;
 
 import uk.ac.ucl.jsh.Core;
 
+
 public class Echo extends AbstractApp implements App{
     private String[] arguments;
 
@@ -11,11 +12,10 @@ public class Echo extends AbstractApp implements App{
 
     @Override
     public void run() throws RuntimeException {
-        for (String arg:arguments){
-            writeOutputStream(arg);
-            writeOutputStream(" ");
-        }
-        writeOutputStream(jshCore.getLineSeparator());
+
+        String result = String.join(" ", arguments);
+        writeOutputStreamLn(result);
+
     }
 
     @Override
