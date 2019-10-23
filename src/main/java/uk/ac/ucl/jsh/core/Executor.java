@@ -24,5 +24,4 @@ public class Executor {
     public void execute() {
         pipelineList.forEach(Pipeline::run);
     }
-
 }
