@@ -1,6 +1,6 @@
 package uk.ac.ucl.jsh.app;
 
-import uk.ac.ucl.jsh.Core;
+import uk.ac.ucl.jsh.core.Core;
 
 import java.io.InputStream;
 import java.io.OutputStream;

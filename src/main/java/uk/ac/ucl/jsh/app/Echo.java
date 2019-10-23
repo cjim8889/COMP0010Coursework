@@ -1,6 +1,6 @@
 package uk.ac.ucl.jsh.app;
 
-import uk.ac.ucl.jsh.Core;
+import uk.ac.ucl.jsh.core.Core;
 
 
 public class Echo extends AbstractApp implements App{
@@ -12,10 +12,8 @@ public class Echo extends AbstractApp implements App{
 
     @Override
     public void run() throws RuntimeException {
-
         String result = String.join(" ", arguments);
         writeOutputStreamLn(result);
-
     }
 
     @Override

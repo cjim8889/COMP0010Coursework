@@ -1,6 +1,8 @@
-package uk.ac.ucl.jsh;
+package uk.ac.ucl.jsh.core;
 
+import uk.ac.ucl.jsh.Descriptor;
 import uk.ac.ucl.jsh.app.App;
+import uk.ac.ucl.jsh.core.Core;
 
 import java.io.IOException;
 import java.io.InputStream;

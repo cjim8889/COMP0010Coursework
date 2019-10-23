@@ -1,6 +1,8 @@
 package uk.ac.ucl.jsh;
 
 import uk.ac.ucl.jsh.app.*;
+import uk.ac.ucl.jsh.core.Core;
+import uk.ac.ucl.jsh.core.JshCore;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -104,12 +106,12 @@ public class Jsh {
                     ls.run();
                     break;
                 case "cat":
-                    Cat cat = new Cat(jshCore);
+                    App cat = new Cat(jshCore);
                     cat.setArgs(appArgs.toArray(new String[]{}));
                     cat.run();
                     break;
                 case "echo":
-                    Echo echo = new Echo(jshCore);
+                    App echo = new Echo(jshCore);
                     echo.setArgs(appArgs.toArray(new String[]{}));
                     echo.run();
                     break;

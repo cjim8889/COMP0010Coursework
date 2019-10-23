@@ -1,6 +1,6 @@
 package uk.ac.ucl.jsh.app;
 
-import uk.ac.ucl.jsh.Core;
+import uk.ac.ucl.jsh.core.Core;
 import uk.ac.ucl.jsh.utility.IntelligentPath;
 
 import java.io.*;
