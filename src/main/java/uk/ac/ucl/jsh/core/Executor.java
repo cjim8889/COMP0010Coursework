@@ -7,7 +7,7 @@ import java.util.List;
 public class Executor {
     private List<Pipeline> pipelineList;
 
-    Executor() {
+    public Executor() {
         pipelineList = new ArrayList<>();
     }
 
