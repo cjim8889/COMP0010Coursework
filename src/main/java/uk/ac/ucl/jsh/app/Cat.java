@@ -15,7 +15,7 @@ public class Cat extends AbstractApp implements App{
     @Override
     public void run() throws RuntimeException {
         try {
-            if (arguments != null) {
+            if (arguments.length != 0) {
                 outputFiles();
             } else {
                 outputStdIn();
@@ -26,7 +26,8 @@ public class Cat extends AbstractApp implements App{
     }
 
     private void outputStdIn() throws IOException {
-        System.in.transferTo(getRawOutputStream());
+        getRawInputStream().transferTo(getRawOutputStream());
+//        transferTo(getRawOutputStream());
     }
     private void outputFiles() {
         for (String arg : arguments){
@@ -40,11 +41,6 @@ public class Cat extends AbstractApp implements App{
 
     @Override
     public void setArgs(String[] args) throws RuntimeException {
-        if (args.length < 1) {
-            arguments = null;
-            return;
-        }
-
         arguments = args;
     }
 }

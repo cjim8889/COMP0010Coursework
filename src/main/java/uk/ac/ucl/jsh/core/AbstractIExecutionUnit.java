@@ -5,12 +5,12 @@ import uk.ac.ucl.jsh.app.App;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public abstract class AbstractPipelineBlock implements PipelineBlock {
+public abstract class AbstractIExecutionUnit implements IExecutionUnit {
     private App app;
     private InputStream inputStream;
     private OutputStream outputStream;
 
-    AbstractPipelineBlock(App app, InputStream inputStream, OutputStream outputStream) {
+    AbstractIExecutionUnit(App app, InputStream inputStream, OutputStream outputStream) {
         this.app = app;
 
         this.inputStream = inputStream;

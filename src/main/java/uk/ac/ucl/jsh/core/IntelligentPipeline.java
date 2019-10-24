@@ -1,43 +1,52 @@
 package uk.ac.ucl.jsh.core;
 
+import org.junit.jupiter.api.Test;
 import uk.ac.ucl.jsh.app.App;
+import uk.ac.ucl.jsh.app.Cd;
+import uk.ac.ucl.jsh.app.Ls;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 public class IntelligentPipeline implements Pipeline {
 
-    private List<PipelineBlock> pipelineBlockList;
+    private List<IExecutionUnit> IExecutionUnitList;
 
     public IntelligentPipeline() {
-        pipelineBlockList = new ArrayList<>();
+        IExecutionUnitList = new ArrayList<>();
     }
 
     @Override
     public void run() {
-        pipelineBlockList.forEach(PipelineBlock::run);
+        IExecutionUnitList.forEach(IExecutionUnit::run);
     }
+
     @Override
     public void append(App app, String[] args) throws IOException {
         InputStream inputStream;
         OutputStream outputStream = new PipedOutputStream();
 
-        if (pipelineBlockList.size() == 0) {
+        if (IExecutionUnitList.size() == 0) {
             inputStream = System.in;
         } else {
-            inputStream = new PipedInputStream((PipedOutputStream) pipelineBlockList.get(pipelineBlockList.size() - 1).getOutputStream());
+            inputStream = new PipedInputStream((PipedOutputStream) IExecutionUnitList.get(IExecutionUnitList.size() - 1).getOutputStream());
         }
 
-        PipelineBlock pipelineBlock = new IntelligentBlock(app, inputStream, outputStream);
-        pipelineBlock.setArgs(args);
+        IExecutionUnit IExecutionUnit = new ExecutionUnit(app, inputStream, outputStream);
+        IExecutionUnit.setArgs(args);
 
-        pipelineBlockList.add(pipelineBlock);
+        IExecutionUnitList.add(IExecutionUnit);
     }
 
     @Override
     public void setOutputStream(OutputStream outputStream) {
-        PipelineBlock endBlock = pipelineBlockList.get(pipelineBlockList.size() - 1);
+        IExecutionUnit endBlock = IExecutionUnitList.get(IExecutionUnitList.size() - 1);
         endBlock.setOutputStream(outputStream);
     }
 }

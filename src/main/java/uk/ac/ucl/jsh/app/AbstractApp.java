@@ -45,6 +45,7 @@ public abstract class AbstractApp implements App {
     OutputStream getRawOutputStream() {
         return outputStream;
     }
+    InputStream getRawInputStream() { return inputStream; }
 
     public void setInputStream(InputStream inputStream) {
         this.inputStream = inputStream;
